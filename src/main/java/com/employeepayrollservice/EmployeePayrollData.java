@@ -4,15 +4,15 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class EmployeePayrollData {
-    public int emp_id;
+    public int id;
     public String name;
     public String gender;
     public double salary;
     public LocalDate startDate;
 
-    public EmployeePayrollData(int emp_id, String name, String gender, double salary, LocalDate startDate) {
+    public EmployeePayrollData(int id, String name, String gender, double salary, LocalDate startDate) {
         super();
-        this.emp_id = emp_id;
+        this.id = id;
         this.name = name;
         this.gender = gender;
         this.salary = salary;
@@ -21,7 +21,7 @@ public class EmployeePayrollData {
 
     @Override
     public int hashCode() {
-        return Objects.hash(emp_id, gender, name, salary, startDate);
+        return Objects.hash(id, gender, name, salary, startDate);
     }
 
     @Override
@@ -33,14 +33,14 @@ public class EmployeePayrollData {
         if (getClass() != obj.getClass())
             return false;
         EmployeePayrollData other = (EmployeePayrollData) obj;
-        return emp_id == other.emp_id && Objects.equals(gender, other.gender) && Objects.equals(name, other.name)
+        return id == other.id && Objects.equals(gender, other.gender) && Objects.equals(name, other.name)
                 && Double.doubleToLongBits(salary) == Double.doubleToLongBits(other.salary)
                 && Objects.equals(startDate, other.startDate);
     }
 
     @Override
     public String toString() {
-        return "EmployeePayrollData [emp_id=" + emp_id + ", name=" + name + ", gender=" + gender + ", salary=" + salary
+        return "EmployeePayrollData [emp_id=" + id + ", name=" + name + ", gender=" + gender + ", salary=" + salary
                 + ", startDate=" + startDate + "]";
     }
 }

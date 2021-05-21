@@ -3,6 +3,7 @@ package com.employeepayrollservice;
 import com.google.gson.Gson;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.employeepayrollservice.EmployeePayrollService.IOService.REST_IO;
 
 public class EmployeePayrollTest {
     @Test
@@ -69,11 +72,42 @@ public class EmployeePayrollTest {
         return arrayOfEmps;
     }
 
+    private Response addEmployeeToJSONServer(EmployeePayrollData employeePayrollData) {
+        String empJson = new Gson().toJson(employeePayrollData);
+        //
+        RequestSpecification request = RestAssured.given();
+        request.header("Content-Type", "application/json");
+        request.body(empJson);
+        return request.post("/employee_payroll");
+    }
+
     @Test
-    public void givenEmployeeDataInJSONServer_WhenRetrieved_ShouldMatchTheCount(){
+    public void givenEmployeeDataInJSONServer_WhenRetrieved_ShouldMatchTheCount() {
         EmployeePayrollData[] arrayOfEmps = getEmployeeList();
         EmployeePayrollService employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmps));
-        long entries=employeePayrollService.countEntries(EmployeePayrollService.IOService.REST_IO);
-        Assertions.assertEquals(2,entries);
+        long entries = employeePayrollService.countEntries(REST_IO);
+        Assertions.assertEquals(2, entries);
+    }
+
+    @Test
+    public void givenNewEmployee_WhenAdded_ShouldMatch201ResponseAndCount() {
+        EmployeePayrollService employeePayrollService;
+        EmployeePayrollData[] arrayOfEmployee = getEmployeeList();
+        employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmployee));
+
+        EmployeePayrollData employeePayrollData = new EmployeePayrollData(0, "Mark Zuckerberg", "M"
+                , 30000.00, LocalDate.now());
+        Response response = addEmployeeToJSONServer(employeePayrollData);
+        int statusCode = response.getStatusCode();
+        Assertions.assertEquals(201, statusCode);
+
+        employeePayrollData = new Gson().fromJson(response.asString(), EmployeePayrollData.class);
+        employeePayrollService.addEmployeeToPayroll(employeePayrollData, REST_IO);
+        //Creating new to retrieve the new added data.
+        EmployeePayrollService employeePayrollService1;
+        EmployeePayrollData[] arrayOfEmployee1 = getEmployeeList();
+        employeePayrollService1 = new EmployeePayrollService(Arrays.asList(arrayOfEmployee1));
+        long entries = employeePayrollService1.countEntries(REST_IO);
+        Assertions.assertEquals(3, entries);
     }
 }

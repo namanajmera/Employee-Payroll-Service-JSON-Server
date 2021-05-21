@@ -35,7 +35,7 @@ public class EmployeePayrollService {
         employeePayrollList.forEach(employeePayrollData -> {
             System.out.println("Employee being added : " + employeePayrollData.name);
             try {
-                this.addEmployeeToPayrollDB(employeePayrollData.emp_id, employeePayrollData.name,
+                this.addEmployeeToPayrollDB(employeePayrollData.id, employeePayrollData.name,
                         employeePayrollData.gender, employeePayrollData.salary, employeePayrollData.startDate);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -43,6 +43,11 @@ public class EmployeePayrollService {
             System.out.println("Employee added : " + employeePayrollData.name);
         });
         System.out.println("" + this.employeePayrollList);
+    }
+
+    public void addEmployeeToPayroll(EmployeePayrollData employeePayrollData, IOService ioService) {
+        if (ioService.equals(IOService.REST_IO))
+            employeePayrollList.add(employeePayrollData);
     }
 
     public void addEmployeeToPayrollWithThreads(List<EmployeePayrollData> asList) {
@@ -54,7 +59,7 @@ public class EmployeePayrollService {
                 employeeAdditionStatus.put(employeePayrollData.hashCode(), false);
                 System.out.println("Employee being added : " + Thread.currentThread().getName());
                 try {
-                    this.addEmployeeToPayrollDB(employeePayrollData.emp_id, employeePayrollData.name,
+                    this.addEmployeeToPayrollDB(employeePayrollData.id, employeePayrollData.name,
                             employeePayrollData.gender, employeePayrollData.salary, employeePayrollData.startDate);
                 } catch (Exception e) {
                     e.printStackTrace();

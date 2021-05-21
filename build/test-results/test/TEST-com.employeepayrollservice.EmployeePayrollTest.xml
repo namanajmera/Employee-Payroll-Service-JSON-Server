@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.employeepayrollservice.EmployeePayrollTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-05-21T06:00:46" hostname="HACKERNAMAN" time="1.243">
+<testsuite name="com.employeepayrollservice.EmployeePayrollTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-05-21T06:43:51" hostname="HACKERNAMAN" time="1.217">
   <properties/>
-  <testcase name="givenEmployeeDataInJSONServer_WhenRetrieved_ShouldMatchTheCount()" classname="com.employeepayrollservice.EmployeePayrollTest" time="1.243"/>
+  <testcase name="givenNewEmployee_WhenAdded_ShouldMatch201ResponseAndCount()" classname="com.employeepayrollservice.EmployeePayrollTest" time="1.217"/>
   <system-out><![CDATA[EMPLOYEE PAYROLL ENTRIES IN JSONServer:
 [
   {
@@ -24,6 +24,42 @@
       "year": 2020,
       "month": 11,
       "day": 1
+    }
+  }
+]
+EMPLOYEE PAYROLL ENTRIES IN JSONServer:
+[
+  {
+    "id": 1,
+    "name": "Jeff Bezos",
+    "gender": "M",
+    "salary": 100000,
+    "startDate": {
+      "year": 2020,
+      "month": 11,
+      "day": 1
+    }
+  },
+  {
+    "id": 2,
+    "name": "Bill Gates",
+    "gender": "M",
+    "salary": 200000,
+    "startDate": {
+      "year": 2020,
+      "month": 11,
+      "day": 1
+    }
+  },
+  {
+    "id": 3,
+    "name": "Mark Zuckerberg",
+    "gender": "M",
+    "salary": 30000,
+    "startDate": {
+      "year": 2021,
+      "month": 5,
+      "day": 21
     }
   }
 ]

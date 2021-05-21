@@ -23,3 +23,39 @@
     }
   }
 ]
+(EMPLOYEE PAYROLL ENTRIES IN JSONServer:
+[
+  {
+    "id": 1,
+    "name": "Jeff Bezos",
+    "gender": "M",
+    "salary": 100000,
+    "startDate": {
+      "year": 2020,
+      "month": 11,
+      "day": 1
+    }
+  },
+  {
+    "id": 2,
+    "name": "Bill Gates",
+    "gender": "M",
+    "salary": 200000,
+    "startDate": {
+      "year": 2020,
+      "month": 11,
+      "day": 1
+    }
+  },
+  {
+    "id": 3,
+    "name": "Mark Zuckerberg",
+    "gender": "M",
+    "salary": 30000,
+    "startDate": {
+      "year": 2021,
+      "month": 5,
+      "day": 21
+    }
+  }
+]
