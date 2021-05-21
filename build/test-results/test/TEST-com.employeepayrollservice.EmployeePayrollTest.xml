@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.employeepayrollservice.EmployeePayrollTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-05-21T06:00:46" hostname="HACKERNAMAN" time="1.243">
+  <properties/>
+  <testcase name="givenEmployeeDataInJSONServer_WhenRetrieved_ShouldMatchTheCount()" classname="com.employeepayrollservice.EmployeePayrollTest" time="1.243"/>
+  <system-out><![CDATA[EMPLOYEE PAYROLL ENTRIES IN JSONServer:
+[
+  {
+    "id": 1,
+    "name": "Jeff Bezos",
+    "gender": "M",
+    "salary": 100000,
+    "startDate": {
+      "year": 2020,
+      "month": 11,
+      "day": 1
+    }
+  },
+  {
+    "id": 2,
+    "name": "Bill Gates",
+    "gender": "M",
+    "salary": 200000,
+    "startDate": {
+      "year": 2020,
+      "month": 11,
+      "day": 1
+    }
+  }
+]
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
