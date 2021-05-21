@@ -128,6 +128,13 @@ public class EmployeePayrollService {
             employeePayrollData.salary = salary;
     }
 
+    public void deleteEmployeePayroll(String name, IOService ioService) {
+        if (ioService.equals(IOService.REST_IO)){
+            EmployeePayrollData employeePayrollData=this.getEmployeeData(name);
+            employeePayrollList.remove(employeePayrollData);
+        }
+    }
+
     public EmployeePayrollData getEmployeeData(String name) {
         return this.employeePayrollList.stream()
                 .filter(employeePayrollData -> employeePayrollData.name.equalsIgnoreCase(name)).findFirst()
