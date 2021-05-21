@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.employeepayrollservice.EmployeePayrollService.IOService.DB_IO;
 import static com.employeepayrollservice.EmployeePayrollService.IOService.REST_IO;
 
 public class EmployeePayrollTest {
@@ -50,7 +51,7 @@ public class EmployeePayrollTest {
         employeeSalaryMap.put("Anil", 3000000.00);
         employeeSalaryMap.put("Mukesh", 2000000.00);
         employeeSalaryMap.put("Sunder Pichai", 5000000.00);
-        employeePayrollService.updateSalaryOfMultipleEmployees(employeeSalaryMap);
+        employeePayrollService.updateSalaryOfMultipleEmployees(employeeSalaryMap, DB_IO);
         Instant threadEnd = Instant.now();
         System.out.println("Duration with Thread : " + Duration.between(threadStart, threadEnd));
         boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Mukesh");
@@ -114,27 +115,42 @@ public class EmployeePayrollTest {
     @Test
     public void givenMultipleEmployee_WhenAdded_ShouldMatch201ResponseAndCount() {
         EmployeePayrollService employeePayrollService;
-        EmployeePayrollData[] arrayOfEmployee=getEmployeeList();
-        employeePayrollService=new EmployeePayrollService(Arrays.asList(arrayOfEmployee));
+        EmployeePayrollData[] arrayOfEmployee = getEmployeeList();
+        employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmployee));
 
-        EmployeePayrollData[] arraysOfEmployeesData={
-                new EmployeePayrollData(0,"Sunder","M",2120000.00,LocalDate.now()),
-                new EmployeePayrollData(0,"Mukesh","M",2000000.00,LocalDate.now()),
-                new EmployeePayrollData(0,"Anil","M",3100000.00,LocalDate.now())
+        EmployeePayrollData[] arraysOfEmployeesData = {
+                new EmployeePayrollData(0, "Sunder", "M", 2120000.00, LocalDate.now()),
+                new EmployeePayrollData(0, "Mukesh", "M", 2000000.00, LocalDate.now()),
+                new EmployeePayrollData(0, "Anil", "M", 3100000.00, LocalDate.now())
         };
-        for (EmployeePayrollData employeePayrollData:arraysOfEmployeesData){
-            Response response=addEmployeeToJSONServer(employeePayrollData);
-            int statusCode=response.getStatusCode();
-            Assertions.assertEquals(201,statusCode);
+        for (EmployeePayrollData employeePayrollData : arraysOfEmployeesData) {
+            Response response = addEmployeeToJSONServer(employeePayrollData);
+            int statusCode = response.getStatusCode();
+            Assertions.assertEquals(201, statusCode);
             //Adding to Current list
-            employeePayrollData=new Gson().fromJson(response.asString(),EmployeePayrollData.class);
-            employeePayrollService.addEmployeeToPayroll(employeePayrollData,REST_IO);
+            employeePayrollData = new Gson().fromJson(response.asString(), EmployeePayrollData.class);
+            employeePayrollService.addEmployeeToPayroll(employeePayrollData, REST_IO);
         }
         EmployeePayrollData[] arrayOfEmployee1 = getEmployeeList();
         employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmployee1));
-        long entries=employeePayrollService.countEntries(REST_IO);
-        Assertions.assertEquals(6,entries);
+        long entries = employeePayrollService.countEntries(REST_IO);
+        Assertions.assertEquals(6, entries);
+    }
 
+    @Test
+    public void givenNewSalaryForEmployee_WhenUpdated_ShouldMatch200Response() {
+        EmployeePayrollService employeePayrollService;
+        EmployeePayrollData[] arrayOfEmployee = getEmployeeList();
+        employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmployee));
 
+        employeePayrollService.updateEmployeeSalary("Anil", 1230000.00, REST_IO);
+        EmployeePayrollData employeePayrollData = employeePayrollService.getEmployeeData("Anil");
+
+        String empJSON = new Gson().toJson(employeePayrollData);
+        RequestSpecification request = RestAssured.given();
+        request.header("Content-Type", "application/json");
+        request.body(empJSON);
+        Response response = request.put("/employee_payroll/" + employeePayrollData.id);
+        Assertions.assertEquals(200, response.getStatusCode());
     }
 }

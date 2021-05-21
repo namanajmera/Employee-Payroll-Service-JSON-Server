@@ -93,13 +93,13 @@ public class EmployeePayrollService {
         return employeePayrollList.size();
     }
 
-    public void updateSalaryOfMultipleEmployees(Map<String, Double> employeeSalaryMap) {
+    public void updateSalaryOfMultipleEmployees(Map<String, Double> employeeSalaryMap, IOService ioService) {
         Map<Integer, Boolean> salaryUpdateStatus = new HashMap<>();
         employeeSalaryMap.forEach((employee, salary) -> {
             Runnable salaryUpdate = () -> {
                 salaryUpdateStatus.put(employee.hashCode(), false);
                 System.out.println("Salary being updated : " + Thread.currentThread().getName());
-                this.updateEmployeeSalary(employee, salary);
+                this.updateEmployeeSalary(employee, salary, ioService);
                 salaryUpdateStatus.put(employee.hashCode(), true);
                 System.out.println("Salary updated : " + Thread.currentThread().getName());
             };
@@ -116,16 +116,19 @@ public class EmployeePayrollService {
         System.out.println("" + this.employeePayrollList);
     }
 
-    public void updateEmployeeSalary(String name, double salary) {
-        int result = employeePayrollDBService.updateEmployeeData(name, salary);
-        if (result == 0)
-            return;
+
+    public void updateEmployeeSalary(String name, double salary, IOService ioService) {
+        if (ioService.equals(IOService.DB_IO)) {
+            int result = employeePayrollDBService.updateEmployeeData(name, salary);
+            if (result == 0)
+                return;
+        }
         EmployeePayrollData employeePayrollData = this.getEmployeeData(name);
         if (employeePayrollData != null)
             employeePayrollData.salary = salary;
     }
 
-    private EmployeePayrollData getEmployeeData(String name) {
+    public EmployeePayrollData getEmployeeData(String name) {
         return this.employeePayrollList.stream()
                 .filter(employeePayrollData -> employeePayrollData.name.equalsIgnoreCase(name)).findFirst()
                 .orElse(null);
